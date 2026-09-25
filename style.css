@@ -23,7 +23,11 @@ body {
 }
 
 #diff-tabs {
-    background-color: #2d1b2e; 
+    margin-bottom: 24px;    
+}
+
+#diff-tabs button {
+    background-color: #2d1b2e;
     color: #e8e0d0;
     border: 2px solid #c9a227;
     border-radius: 8px;
@@ -47,7 +51,7 @@ body {
     max-width: 1000px;
 }
 
-#block-card {
+.block-card {
     background-color: #2d1b2e;
     border: 2px solid #c9a227;
     border-radius: 12px;

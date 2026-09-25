@@ -207,7 +207,7 @@
                 const size = block.grid[0].length;
                 const label = difficulties.find(d => d.id === block.difficulty).label;
                 return `
-                <div class="block-card${block.id === selectedBlockId ? ' selected' : ''}">
+                <div class="block-card${block.id === selectedBlockId ? ' selected' : ''}" data-id="${block.id}">
                     <h3>${block.name}</h3>
                     <p class="diff-label">${label}</p>
                     <div class="block" style="grid-template-columns: repeat(${size}, 1fr)">
