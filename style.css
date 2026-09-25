@@ -1,0 +1,97 @@
+body {
+    background-color: #1a1a2e;
+    color: #e8e0d0;
+    font-family: Georgia, serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 40px;
+}
+
+#fabric-studio{
+    background-color: #2d1b2e;
+    border: 2px solid #c9a227;
+    border-radius: 12px;
+    padding: 20px 30px;
+    text-align: center;
+    margin-bottom: 24px;
+}
+
+#fabric-studio label {
+    margin: 0 12px;
+    cursor: pointer;
+}
+
+#diff-tabs {
+    background-color: #2d1b2e; 
+    color: #e8e0d0;
+    border: 2px solid #c9a227;
+    border-radius: 8px;
+    padding: 8px 20px;
+    margin: 0 6px;
+    font-family: Georgia, serif;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+#diff-tabs button.active {
+    background-color: #c9a227;
+    color: #1a1a2e;
+}
+
+#library {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 24px;
+    justify-content: center;
+    max-width: 1000px;
+}
+
+#block-card {
+    background-color: #2d1b2e;
+    border: 2px solid #c9a227;
+    border-radius: 12px;
+    padding: 20px;
+    text-align: center;
+    cursor: pointer;
+}
+
+.block-card.selected {
+    box-shadow: 0 0 0 3px #e8e0d0;
+}
+
+.block-card h3 {
+    color: #c9a227;
+    margin: 0 0 4px 0;
+}
+
+.diff-label {
+    font-size: 14px;
+    color: #a89a7a;
+    margin: 0 0 12px 0;
+}
+
+.block {
+    display: grid;
+    gap: 2px;
+    width: 160px;
+    margin: 0 auto;
+}
+
+.cell {
+    aspect-ratio: 1;
+}
+
+#preview {
+    margin-top: 40px;
+    text-align: center;
+}
+
+#preview-block .block {
+    width: 280px;
+}
+
+#quilt-top .block {
+    width: 480px;
+    max-width: 90vw;
+}
