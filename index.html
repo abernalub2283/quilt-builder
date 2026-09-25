@@ -169,6 +169,7 @@
         };
 
         let activeDifficulty = 'beginner';
+        let selectedBlockId = localStorage.getItem('quiltSelected') || null;
         const difficulties = [
             { id: 'beginner', label: 'Beginner' },
             { id: 'intermediate', label: 'Intermediate' },
@@ -206,7 +207,7 @@
                 const size = block.grid[0].length;
                 const label = difficulties.find(d => d.id === block.difficulty).label;
                 return `
-                <div class="block-card" data-id="${block.id}">
+                <div class="block-card${block.id === selectedBlockId ? ' selected' : ''}">
                     <h3>${block.name}</h3>
                     <p class="diff-label">${label}</p>
                     <div class="block" style="grid-template-columns: repeat(${size}, 1fr)">
@@ -240,8 +241,51 @@
                 fabrics[letter] = event.target.value;
                 localStorage.setItem('quiltFabrics', JSON.stringify(fabrics));
                 renderLibrary();
+                renderPreview();
             });
         });
+
+        const previewName = document.getElementById('preview-name');
+        const previewBlock = document.getElementById('preview-block');
+        const quiltTop = document.getElementById('quilt-top');
+
+        function tiledGrid(block, tiles) {
+            const big = [];
+            for (let t = 0; t < tiles; t++) {
+                block.grid.forEach(function(row) {
+                    big.push(row.repeat(tiles));
+                });
+            }
+            return big;
+        }
+
+        function renderPreview() {
+            const block = blocks.find(b => b.id === selectedBlockId);
+            if (!block) {
+                previewName.textContent = 'Pick a block below to preview it here.';
+                previewBlock.innerHTML = '';
+                quiltTop.innerHTML = '';
+                return;
+            }
+            previewName.textContent = block.name;
+            const size = block.grid[0].length;
+            previewBlock.innerHTML = `<div class="block" style="grid-template-columns: repeat(${size}, 1fr)">${blockCells(block)}</div>`;
+            const big = tiledGrid(block, 4);
+            const bigSize = big[0].length;
+            quiltTop.innerHTML = `<div class="block" style="grid-template-columns: repeat(${bigSize}, 1fr)">${blockCells({ grid: big })}</div>`;
+        }
+
+        library.addEventListener('click', function(event) {
+            const card = event.target.closest('.block-card');
+            if (!card) return;
+            selectedBlockId = card.dataset.id;
+            localStorage.setItem('quiltSelected', selectedBlockId);
+            renderLibrary();
+            renderPreview();
+        });
+
+        renderPreview();
+
         </script>
     </body>
 </html>
