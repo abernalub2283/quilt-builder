@@ -29,7 +29,219 @@
         </div>
 
         <script>
-            //Step 2 goes here
+            const blocks = [
+            // ---- Beginner ----
+            { id: 'four-patch', name: 'Four Patch', difficulty: 'beginner', grid: [
+                'AB',
+                'BA'
+            ]},
+            { id: 'nine-patch', name: 'Nine Patch', difficulty: 'beginner', grid: [
+                'ABA',
+                'BAB',
+                'ABA'
+            ]},
+            { id: 'checkerboard', name: 'Checkerboard', difficulty: 'beginner', grid: [
+                'ABAB',
+                'BABA',
+                'ABAB',
+                'BABA'
+            ]},
+            { id: 'rail-fence', name: 'Rail Fence', difficulty: 'beginner', grid: [
+                'AAAA',
+                'BBBB',
+                'CCCC',
+                'DDDD'
+            ]},
+            { id: 'bar-quilt', name: 'Bar Quilt', difficulty: 'beginner', grid: [
+                'ABCD',
+                'ABCD',
+                'ABCD',
+                'ABCD'
+            ]},
+            { id: 'framed-square', name: 'Framed Square', difficulty: 'beginner', grid: [
+                'AAAAA',
+                'ABBBA',
+                'ABBBA',
+                'ABBBA',
+                'AAAAA'
+            ]},
+            // ---- Intermediate ----
+            { id: 'pinwheel', name: 'Pinwheel', difficulty: 'intermediate', grid: [
+                'ABBA',
+                'ABBA',
+                'BAAB',
+                'BAAB'
+            ]},
+            { id: 'hourglass', name: 'Hourglass', difficulty: 'intermediate', grid: [
+                'ABBA',
+                'BAAB',
+                'BAAB',
+                'ABBA'
+            ]},
+            { id: 'shoo-fly', name: 'Shoo Fly', difficulty: 'intermediate', grid: [
+                'ABA',
+                'BBB',
+                'ABA'
+            ]},
+            { id: 'friendship-star', name: 'Friendship Star', difficulty: 'intermediate', grid: [
+                'AABAA',
+                'AABAA',
+                'BBBBB',
+                'AABAA',
+                'AABAA'
+            ]},
+            { id: 'square-in-square', name: 'Square in a Square', difficulty: 'intermediate', grid: [
+                'AABAA',
+                'ABBBA',
+                'BBBBB',
+                'ABBBA',
+                'AABAA'
+            ]},
+            { id: 'log-cabin', name: 'Log Cabin', difficulty: 'intermediate', grid: [
+                'AAAAAAA',
+                'ABBBBBA',
+                'ABCCCBA',
+                'ABCDCBA',
+                'ABCCCBA',
+                'ABBBBBA',
+                'AAAAAAA'
+            ]},
+            // ---- Advanced ----
+            { id: 'morning-star', name: 'Morning Star', difficulty: 'advanced', grid: [
+                'BAABAAB',
+                'ABABABA',
+                'AABBBAA',
+                'BBBCBBB',
+                'AABBBAA',
+                'ABABABA',
+                'BAABAAB'
+            ]},
+            { id: 'sawtooth-star', name: 'Sawtooth Star', difficulty: 'advanced', grid: [
+                'AABBBAA',
+                'AABBBAA',
+                'BBBCBBB',
+                'BBCCCBB',
+                'BBBCBBB',
+                'AABBBAA',
+                'AABBBAA'
+            ]},
+            { id: 'churn-dash', name: 'Churn Dash', difficulty: 'advanced', grid: [
+                'ABBBA',
+                'BAAAB',
+                'BABAB',
+                'BAAAB',
+                'ABBBA'
+            ]},
+            { id: 'double-nine-patch', name: 'Double Nine Patch', difficulty: 'advanced', grid: [
+                'ABAABAABA',
+                'BABAAABAB',
+                'ABAABAABA',
+                'AAAAAAAAA',
+                'AAAAAAAAA',
+                'AAAAAAAAA',
+                'ABAABAABA',
+                'BABAAABAB',
+                'ABAABAABA'
+            ]},
+            { id: 'broken-dishes', name: 'Broken Dishes', difficulty: 'advanced', grid: [
+                'ABBAAB',
+                'BAABBA',
+                'BAABBA',
+                'ABBAAB',
+                'ABBAAB',
+                'BAABBA'
+            ]},
+            { id: 'diamond-band', name: 'Diamond Band', difficulty: 'advanced', grid: [
+                'AABBAA',
+                'ABBBBA',
+                'BBBBBB',
+                'BBBBBB',
+                'ABBBBA',
+                'AABBAA'
+            ]}
+        ];
+
+        let fabrics = JSON.parse(localStorage.getItem('quiltFabrics')) ||{
+            A: '#f3ead8',
+            B: '#31435f',
+            C: '#c9a227',
+            D: '#8a4b5c'
+        };
+
+        let activeDifficulty = 'beginner';
+        const difficulties = [
+            { id: 'beginner', label: 'Beginner' },
+            { id: 'intermediate', label: 'Intermediate' },
+            { id: 'advanced', label: 'Advanced' }
+        ];
+
+        const diffTabs = document.getElementById('diff-tabs');
+        const library = document.getElementById('library');
+
+        function renderTabs() {
+            diffTabs.innerHTML = difficulties.map(d =>
+                `<button data-id="${d.id}"${d.id === activeDifficulty ? ' class="active"' : ''}>${d.label}</button>`
+            ).join('');
+        }
+
+        function blockCells(block) {
+            return block.grid.map(function(row) {
+                return row.split('').map(function(cell) {
+                    return `<div class="cell" style="background-color: ${fabrics[cell]}"></div>`;
+                }).join('');
+            }).join('');
+        }
+
+        function fabricsUsed(block) {
+            const letters = [];
+            block.grid.join('').split('').forEach(function(ch) {
+                if (!letters.includes(ch)) letters.push(ch);
+            });
+            return letters.join(', ');
+        }
+
+        function renderLibrary() {
+            const shown = blocks.filter(b => b.difficulty === activeDifficulty);
+            library.innerHTML = shown.map(function(block) {
+                const size = block.grid[0].length;
+                const label = difficulties.find(d => d.id === block.difficulty).label;
+                return `
+                <div class="block-card" data-id="${block.id}">
+                    <h3>${block.name}</h3>
+                    <p class="diff-label">${label}</p>
+                    <div class="block" style="grid-template-columns: repeat(${size}, 1fr)">
+                        ${blockCells(block)}
+                    </div>
+                    <p class="fabrics">Fabrics: ${fabricsUsed(block)}</p>
+                </div>`;
+            }).join('');
+        }
+
+        diffTabs.addEventListener('click', function(event) {
+            if (!event.target.matches('button')) return;
+            activeDifficulty = event.target.dataset.id;
+            renderTabs();
+            renderLibrary();
+        });
+
+        renderTabs();
+        renderLibrary();
+
+        const fabInputs = {
+            A: document.getElementById('fab-A'),
+            B: document.getElementById('fab-B'),
+            C: document.getElementById('fab-C'),
+            D: document.getElementById('fab-D')
+        };
+
+        Object.keys(fabInputs).forEach(function(letter) {
+            fabInputs[letter].value = fabrics[letter];
+            fabInputs[letter].addEventListener('input', function(event) {
+                fabrics[letter] = event.target.value;
+                localStorage.setItem('quiltFabrics', JSON.stringify(fabrics));
+                renderLibrary();
+            });
+        });
         </script>
     </body>
 </html>
